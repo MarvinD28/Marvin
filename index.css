@@ -1,0 +1,55 @@
+:root {
+  --displaymenu: block;
+  --displaygame: none;
+}
+body {
+    background-color: rgb(255, 255, 255);
+  }
+  h1 {
+    color: rgb(36, 112, 0);
+    margin-top: 25px;
+    text-align: center;
+    font-size: 100px;
+  }
+
+
+  .menu{
+    width:300px;
+    margin:auto;
+  }
+  .menu {
+    font-size: 36px;
+    display: var(--displaymenu);
+  }
+   #time{
+    width: 150px;
+   }
+  #game{
+    width: 750px;
+  }
+    .game{
+      
+      margin:auto;
+      display: var(--displaygame)
+    }
+    
+  
+  
+  input {
+    float: right;
+    width: 175px;
+    font-size: 36px;
+    height: 36px;
+  }
+  #playername {
+    font-size: medium;
+    
+  }
+ 
+  #startbutton{
+    margin-top: 100px;
+    height: 150px;
+    width: 300px;
+    font-size: 50px;
+    
+  }

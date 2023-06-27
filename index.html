@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schäferspiel</title>
+        <link rel="stylesheet" href="index.css">
+        
+    </head>
+    <body>
+        <h1>Schäferspiel</h1>  
+        <div class="menu"> 
+            <p1>Name:</p1>
+            <input id="playername" placeholder="name" name="Eingabefeld" type="text" />
+            <p2>Steine:</p2>
+            <input id="amountrocks" type="number" placeholder="0" min="0" max="5" />
+            <p3>Bäume:</p3>
+            <input id="amounttrees" type="number" placeholder="0" min="0" max="5" />
+            <button id="startbutton" type="submit" onclick="start()">Start</button>
+        </div>
+        <div class="game" id="time">00:00</div> 
+        <!-- <img src="pngkit_minecraft-sheep-png_3472989.png" alt="Sheep"> -->
+        <!-- <img src="george.png" alt="Player"> -->
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <div class="game"id="game">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+            <img class="ground" src="ground_tiles.png" alt="Gras">
+        </div>
+        <script src="main.js"></script>
+    </body>
+    
+</html>
