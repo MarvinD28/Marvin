@@ -1,0 +1,84 @@
+:root {
+  --displaymenu: block;
+  --displaygame: none;
+  --displaygameboard: none;
+  --displaylink: inline-block;
+  --displaynametag: none;
+}
+body {
+  background-color: rgb(255, 255, 255);
+}
+h1 {
+  color: rgb(36, 112, 0);
+  margin-top: 25px;
+  text-align: center;
+  font-size: 100px;
+}
+#menu{
+  display: var(--displaymenu);
+}
+.menu {
+  width:300px;
+  margin:auto;
+  font-size: 36px;
+  display: var(--displaymenu);
+}
+#link{
+  display: var(--displaylink);
+  width: auto;
+  
+}
+.nametag{
+  display: var(--displaynametag); 
+
+}
+#name{
+  text-align: center;
+  
+}
+#time{
+  width: 150px;
+}
+#gameboard{
+  width: 800px;
+  height: 800px;
+  display: var(--displaygameboard);
+  flex-wrap: wrap;
+}
+.game{
+  margin:auto;
+  display: var(--displaygame)
+}
+#timeDisplay{
+  font-size: 1.5vw;
+  float: left;
+}
+#resetbutton{
+  float: right;
+  width: 9%;
+  height: 9%;
+  font-size: 1.5vw;
+}
+input {
+  float: right;
+  width: 175px;
+  font-size: 36px;
+  height: 36px;
+}
+#playername {
+  font-size: medium;
+}
+#startbutton{
+  margin-top: 100px;
+  height: 150px;
+  width: 300px;
+  font-size: 50px; 
+}
+.square{
+  height: 80px;
+  width: 80px;
+}
+.blocking{
+  height: 80px;
+  width: 80px;
+}

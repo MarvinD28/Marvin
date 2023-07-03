@@ -1,0 +1,6 @@
+Spielfeld als hintergrundbild dann maximale anzahl an bäumen und steinen übereinanderlegen und
+display: none;
+machen und wenn der spieler eingibt wie viele steine und bäume gespawnt werden sollen soviele aufs 
+spielfeld bringen 
+koordinatensystem machen und buttons die mehr als eins weg sind blockieren und den button wo der spieler 
+steht auch blockieren zudem blockieren bäume und steine

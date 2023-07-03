@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Schäferspiel</title>
+        <link rel="stylesheet" href="index.css">
+        
+    </head>
+    <body>
+        <a id="link" href="documentation.html">Dokumentation</a>
+            <h1 id="menu">Schäferspiel</h1>  
+            
+            
+            
+            
+        <div class="menu" > 
+            <p1>Name:</p1>
+            <input id="playername" placeholder="name" name="Eingabefeld" type="text" />
+            <br><br>
+            <p2>Steine:</p2>
+            <input id="amountrocks" type="number" value="0" maxlength="1" min="0" max="9" />
+            <br><br>
+            <p3>Bäume:</p3>
+            <input id="amounttrees" type="number" value="0" min="0" max="9" />
+            <button id="startbutton"  type="submit">Start</button>
+        </div>
+        
+        
+        <div>
+            <button class="game"id="resetbutton" type="reset" onclick="back()">Back</button> 
+            <div class="game" id="timeDisplay">00:00:00</div><br>
+        </div>
+            <p class="nametag" id="name"></p>
+        
+        
+        <div class="game"id="gameboard"></div>
+        
+        <script src="main.js"></script>
+    </body>
+    
+</html>
+<!-- <img src="pngkit_minecraft-sheep-png_3472989.png" alt="Sheep"> -->
+        <!-- <img src="george.png" alt="Player"> -->
