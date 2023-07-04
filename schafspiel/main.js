@@ -4,6 +4,7 @@ const playername = document.getElementById('playername');
 const name = document.getElementById('name');
 let gameBoard = document.querySelector("#gameboard");
 const width = 10;
+let debugmode = false;
 let startBoard = [
   "", "", "", "", "", "", "", "", "", "",
   "", "", "", "", "", "", "", "", "", "",
@@ -142,42 +143,81 @@ function createBoard() {
   gameBoard.querySelectorAll(".square").forEach((square) => {
     square.addEventListener("click", () => {
       if (isAdjacent(square, shepherd.shepherdImageElement)) {
+        
         let shepherdSquare = document.querySelector(".shepherd");
         shepherdSquare.classList.remove("shepherd");
         square.classList.add("shepherd");
         square.appendChild(shepherd.shepherdImageElement);
         shepherdSteps++;
+        if(debugmode)
+        {let debugSquare = document.querySelectorAll(".accessable");
+        if(debugSquare !== null){
+            gameBoard.querySelectorAll(".accessable").forEach((square) => {
+                square.classList.remove("accessable");
+            });
+        }
+        debug();
+        }
+        //check ob win
+        let winner = getAdjacentSquares(square);
+        let won = false;
+        let wolfSquare = document.querySelector(".wolf");
+        let sheepSquare = document.querySelector(".sheep");
+        for (let r = 0; r < 8; r++){
+            if(winner[r] === wolfSquare || winner[r] === sheepSquare){
+                won = true;
+            }
+        }
+        if(won){
+            win(shepherdSteps);
+        }
+        //zug vom Schaf
         moveSheep(startingquarter, sheepquarter);
-        
-        moveWolf();
+        //zug vom Wolf
+        moveWolf(wolfSquare, sheepSquare);
+        //check ob lose
+        let loser = getAdjacentSquares(wolfSquare);
+        for (let q = 0; q < 8; q++){
+            if(loser[q] === sheepSquare && !won){
+                lose();
+            }
+        }
       }
     });
   });
 }
-function moveWolf() {
-    let wolfSquare = document.querySelector(".wolf");
-    let sheepSquare = document.querySelector(".sheep");
-    let wolfSquareID = parseInt(wolfSquare.getAttribute("square-id"));
+function moveWolf(wolfSquare, sheepSquare) {
+    //nimmt die SquareID vom Feld auf dem das Schaf steht
     let sheepSquareID = parseInt(sheepSquare.getAttribute("square-id"));
-    let distance1 = calculateDistance(wolfSquareID, sheepSquareID);
     let wolfAdjacentSquares = getAdjacentSquares(wolfSquare);
-    let wolfAdjacentSquaresSquareID = (8)
-    let wolfSquareFound = false;
-    let wolfNewSqare;
-    let distance2;
-    for (let i = 0; i < 8; i++){
-        if(!wolfSquareFound && wolfAdjacentSquares[i] != null){
-            wolfAdjacentSquaresSquareID[i] = parseInt(wolfAdjacentSquares[i].getAttribute("square-id"));
-            distance2 = calculateDistance(wolfAdjacentSquaresSquareID[i], sheepSquare)
-            if(distance2 < distance1 && !isObstacle(wolfAdjacentSquares[i])){
-                wolfNewSqare = wolfAdjacentSquares[i];
-                wolfSquareFound = true;
+    let wolfAdjacentSquaresSquareID = [null,null,null,null,null,null,null,null]
+    let wolfNewSquare;
+    let distance;
+    let counter = 0;
+    let numbers = [];
+    let number = 0;
+    do {
+        for (let t = 0; t < 8; t++){
+            if(wolfAdjacentSquares[t] !== null){
+                wolfAdjacentSquaresSquareID[t] = parseInt(wolfAdjacentSquares[t].getAttribute("square-id"));
+    
+                distance = calculateDistance(wolfAdjacentSquaresSquareID[t], sheepSquareID);
+                if(distance === counter && !isObstacle(wolfAdjacentSquares[t])){
+                    numbers.push(wolfAdjacentSquares[t]);
+                }
             }
         }
-    }
+        counter++;
+    } while (numbers.length === 0);
+    number = Math.round(Math.random() * 100)
+    number %= numbers.length;
+    wolfNewSquare = numbers[number];
     wolfSquare.classList.remove("wolf");
-    wolfNewSqare.classList.add("wolf");
-    wolfNewSqare.appendChild(wolf.wolfImageElement);
+    wolfNewSquare.classList.add("wolf");
+    if(debugmode && wolfNewSquare.classList.contains("accessable")){
+        wolfNewSquare.classList.remove("accessable");
+      }
+    wolfNewSquare.appendChild(wolf.wolfImageElement);
 }
 function isAdjacent(square, element) {
     const currentSquareId = parseInt(square.getAttribute("square-id"));
@@ -190,8 +230,10 @@ function isAdjacent(square, element) {
     return false;
   }
   function isObstacle(square) {
+    if(square !== null){
     const obstacles = square.getElementsByClassName("blocking");
     return obstacles.length > 0;
+}
   }
   
   function calculateDistance(squareId1, squareId2) {
@@ -204,279 +246,294 @@ function isAdjacent(square, element) {
   function moveSheep(startingquarter, sheepquarter) {
     let sheepSquare = document.querySelector(".sheep");
         sheepSquare.classList.remove("sheep");
-    let targetQuarter;
     let adjacentSquares = getAdjacentSquares(sheepSquare);
     let sheepNewSquare;
         switch(startingquarter){
             case 1:
-                targetQuarter = 99;
                 switch(sheepquarter){
                     case 2:
-                    if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){ 
+                    if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){ 
                         sheepNewSquare = adjacentSquares[5];  
                     } 
-                    else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                    else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                         sheepNewSquare = adjacentSquares[7]; 
                     }
-                    else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                    else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                         sheepNewSquare = adjacentSquares[3]; 
                     }
-                    else if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){
+                    else if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){
                         sheepNewSquare = adjacentSquares[2]; 
                     }
-                    else if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){
+                    else if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){
                         sheepNewSquare = adjacentSquares[4]; 
                     }
-                    else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                    else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                         sheepNewSquare = adjacentSquares[0]; 
                     }
-                    else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                    else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                         sheepNewSquare = adjacentSquares[6]; 
                     }
-                    else if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){
+                    else if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){
                         sheepNewSquare = adjacentSquares[1]; 
                     }
                         break;
                     case 3:
-                        if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){ 
+                        if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){ 
                             sheepNewSquare = adjacentSquares[5];  
                         } 
-                        else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                        else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                             sheepNewSquare = adjacentSquares[3]; 
                         }
-                        else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                        else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                             sheepNewSquare = adjacentSquares[7]; 
                         }
-                        else if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){
+                        else if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){
                             sheepNewSquare = adjacentSquares[4]; 
                         }
-                        else if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){
+                        else if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){
                             sheepNewSquare = adjacentSquares[2]; 
                         }
-                        else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                        else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                             sheepNewSquare = adjacentSquares[6]; 
                         }
-                        else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                        else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                             sheepNewSquare = adjacentSquares[0]; 
                         }
-                        else if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){
+                        else if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){
                             sheepNewSquare = adjacentSquares[1]; 
                         }
                         break;
                 }
                 break;
             case 2:
-                targetQuarter = 90;
                 switch(sheepquarter){
                     case 1:
-                        if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){ 
+                        if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){ 
                             sheepNewSquare = adjacentSquares[4];  
                         } 
-                        else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                        else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                             sheepNewSquare = adjacentSquares[3]; 
                         }
-                        else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                        else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                             sheepNewSquare = adjacentSquares[6]; 
                         }
-                        else if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){
+                        else if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){
                             sheepNewSquare = adjacentSquares[5]; 
                         }
-                        else if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){
+                        else if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){
                             sheepNewSquare = adjacentSquares[1]; 
                         }
-                        else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                        else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                             sheepNewSquare = adjacentSquares[0]; 
                         }
-                        else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                        else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                             sheepNewSquare = adjacentSquares[7]; 
                         }
-                        else if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){
+                        else if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){
                             sheepNewSquare = adjacentSquares[2]; 
                         }
                         break;
                     case 4:
-                        if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){ 
+                        if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){ 
                             sheepNewSquare = adjacentSquares[4];  
                         } 
-                        else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                        else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                             sheepNewSquare = adjacentSquares[6]; 
                         }
-                        else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                        else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                             sheepNewSquare = adjacentSquares[3]; 
                         }
-                        else if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){
+                        else if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){
                             sheepNewSquare = adjacentSquares[1]; 
                         }
-                        else if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){
+                        else if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){
                             sheepNewSquare = adjacentSquares[5]; 
                         }
-                        else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                        else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                             sheepNewSquare = adjacentSquares[7]; 
                         }
-                        else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                        else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                             sheepNewSquare = adjacentSquares[0]; 
                         }
-                        else if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){
+                        else if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){
                             sheepNewSquare = adjacentSquares[2]; 
                         }
                         break;
                 }
                 break;
             case 3:
-                targetQuarter = 9;
                 switch(sheepquarter){
                     case 1:
-                        if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){ 
+                        if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){ 
                             sheepNewSquare = adjacentSquares[2];  
                         } 
-                        else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                        else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                             sheepNewSquare = adjacentSquares[7]; 
                         }
-                        else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                        else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                             sheepNewSquare = adjacentSquares[0]; 
                         }
-                        else if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){
+                        else if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){
                             sheepNewSquare = adjacentSquares[5]; 
                         }
-                        else if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){
+                        else if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){
                             sheepNewSquare = adjacentSquares[1]; 
                         }
-                        else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                        else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                             sheepNewSquare = adjacentSquares[6]; 
                         }
-                        else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                        else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                             sheepNewSquare = adjacentSquares[3]; 
                         }
-                        else if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){
+                        else if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){
                             sheepNewSquare = adjacentSquares[4]; 
                         }    
                         break;
                     case 4:
-                        if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){ 
+                        if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){ 
                             sheepNewSquare = adjacentSquares[2];  
                         } 
-                        else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                        else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                             sheepNewSquare = adjacentSquares[0]; 
                         }
-                        else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                        else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                             sheepNewSquare = adjacentSquares[7]; 
                         }
-                        else if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){
+                        else if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){
                             sheepNewSquare = adjacentSquares[1]; 
                         }
-                        else if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){
+                        else if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){
                             sheepNewSquare = adjacentSquares[5]; 
                         }
-                        else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                        else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                             sheepNewSquare = adjacentSquares[3]; 
                         }
-                        else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                        else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                             sheepNewSquare = adjacentSquares[6]; 
                         }
-                        else if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){
+                        else if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){
                             sheepNewSquare = adjacentSquares[4]; 
                         }        
                         break;
                 }
                 break;
             case 4:
-                targetQuarter = 0;
                 switch(sheepquarter){
                     case 2:
-                        if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){ 
+                        if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){ 
                             sheepNewSquare = adjacentSquares[1];  
                         } 
-                        else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                        else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                             sheepNewSquare = adjacentSquares[6]; 
                         }
-                        else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                        else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                             sheepNewSquare = adjacentSquares[0]; 
                         }
-                        else if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){
+                        else if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){
                             sheepNewSquare = adjacentSquares[4]; 
                         }
-                        else if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){
+                        else if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){
                             sheepNewSquare = adjacentSquares[2]; 
                         }
-                        else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                        else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                             sheepNewSquare = adjacentSquares[7]; 
                         }
-                        else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                        else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                             sheepNewSquare = adjacentSquares[3]; 
                         }
-                        else if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){
+                        else if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){
                             sheepNewSquare = adjacentSquares[5]; 
                         }          
                         break;
                     case 3:
-                        if(adjacentSquares[1] != null && !isObstacle(adjacentSquares[1])){ 
+                        if(adjacentSquares[1] !== null && !isObstacle(adjacentSquares[1])){ 
                             sheepNewSquare = adjacentSquares[1];  
                         } 
-                        else if(adjacentSquares[0] != null && !isObstacle(adjacentSquares[0])){
+                        else if(adjacentSquares[0] !== null && !isObstacle(adjacentSquares[0])){
                             sheepNewSquare = adjacentSquares[0]; 
                         }
-                        else if(adjacentSquares[6] != null && !isObstacle(adjacentSquares[6])){
+                        else if(adjacentSquares[6] !== null && !isObstacle(adjacentSquares[6])){
                             sheepNewSquare = adjacentSquares[6]; 
                         }
-                        else if(adjacentSquares[2] != null && !isObstacle(adjacentSquares[2])){
+                        else if(adjacentSquares[2] !== null && !isObstacle(adjacentSquares[2])){
                             sheepNewSquare = adjacentSquares[2]; 
                         }
-                        else if(adjacentSquares[4] != null && !isObstacle(adjacentSquares[4])){
+                        else if(adjacentSquares[4] !== null && !isObstacle(adjacentSquares[4])){
                             sheepNewSquare = adjacentSquares[4]; 
                         }
-                        else if(adjacentSquares[3] != null && !isObstacle(adjacentSquares[3])){
+                        else if(adjacentSquares[3] !== null && !isObstacle(adjacentSquares[3])){
                             sheepNewSquare = adjacentSquares[3]; 
                         }
-                        else if(adjacentSquares[7] != null && !isObstacle(adjacentSquares[7])){
+                        else if(adjacentSquares[7] !== null && !isObstacle(adjacentSquares[7])){
                             sheepNewSquare = adjacentSquares[7]; 
                         }
-                        else if(adjacentSquares[5] != null && !isObstacle(adjacentSquares[5])){
+                        else if(adjacentSquares[5] !== null && !isObstacle(adjacentSquares[5])){
                             sheepNewSquare = adjacentSquares[5]; 
                         }    
                         break;
                     }
                     break;
         }
-      sheepNewSquare.classList.add("sheep");
+        sheepNewSquare.classList.add("sheep");
+      if(debugmode && sheepNewSquare.classList.contains("accessable")){
+        sheepNewSquare.classList.remove("accessable");
+      }
       sheepNewSquare.appendChild(sheep.sheepImageElement);
   }
   function getAdjacentSquares(square) {
-  const squareId = parseInt(square.getAttribute("square-id"));
-  const adjacentSquares = [];
-  if (squareId >= width) {
-    adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - width}"]`));
+    const squareId = parseInt(square.getAttribute("square-id"));
+    const adjacentSquares = [];
+  
+    if (squareId >= width) {
+      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - width}"]`));
+      if (squareId % width !== 0) {
+        adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - width - 1}"]`));
+      } else {
+        adjacentSquares.push(null);
+      }
+      if ((squareId + 1) % width !== 0) {
+        adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - width + 1}"]`));
+      } else {
+        adjacentSquares.push(null);
+      }
+    } else {
+      adjacentSquares.push(null);
+      adjacentSquares.push(null);
+      adjacentSquares.push(null);
+    }
+  
+    if (squareId < width * (width - 1)) {
+      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + width}"]`));
+      if (squareId % width !== 0) {
+        adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + width - 1}"]`));
+      } else {
+        adjacentSquares.push(null);
+      }
+      if ((squareId + 1) % width !== 0) {
+        adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + width + 1}"]`));
+      } else {
+        adjacentSquares.push(null);
+      }
+    } else {
+      adjacentSquares.push(null);
+      adjacentSquares.push(null);
+      adjacentSquares.push(null);
+    }
+  
     if (squareId % width !== 0) {
-      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - width - 1}"]`));
-    } else {adjacentSquares.push(null);}
+      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - 1}"]`));
+    } else {
+      adjacentSquares.push(null);
+    }
     if ((squareId + 1) % width !== 0) {
-      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - width + 1}"]`));
-    } else {adjacentSquares.push(null);}
-  } else {
-    adjacentSquares.push(null);
-    adjacentSquares.push(null);
-    adjacentSquares.push(null);
+      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + 1}"]`));
+    } else {
+      adjacentSquares.push(null);
+    }
+  
+    return adjacentSquares;
   }
-  if (squareId < width * (width - 1)) {
-    adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + width}"]`));
-    if (squareId % width !== 0) {
-      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + width - 1}"]`));
-    } else {adjacentSquares.push(null);}
-    if ((squareId + 1) % width !== 0) {
-      adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + width + 1}"]`));
-    } else {adjacentSquares.push(null);}
-  } else {
-    adjacentSquares.push(null);
-    adjacentSquares.push();
-    adjacentSquares.push();
-}
-  if (squareId % width !== 0) {
-    adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId - 1}"]`));
-  } else {adjacentSquares.push(null);}
-  if ((squareId + 1) % width !== 0) {
-    adjacentSquares.push(gameBoard.querySelector(`[square-id="${squareId + 1}"]`));
-  } else {adjacentSquares.push(null);}
-  return adjacentSquares;
-}
+  
 function wolfPosition(wauwau){
     let side = Math.round(Math.random() * 3)
     let squareElements
@@ -720,7 +777,8 @@ function updateTime() {
   }
 }
 function back() {
-  resetGame();
+activateDebug()
+resetGame();
   let rootElement = document.querySelector(":root");
   rootElement.style.setProperty("--displaymenu", "block");
   rootElement.style.setProperty("--displaygame", "none");
@@ -728,9 +786,48 @@ function back() {
   rootElement.style.setProperty("--displaylink", "inline-grid");
   rootElement.style.setProperty("--displaynametag", "none");
   shepherdSteps = 0;
+  activateDebug()
 }
-function win() {
-  time.paused = true;
-  clearInterval(timer);
-  alert("You Win!");
+function win(shepherdSteps) {
+activateDebug()
+time.paused = true;
+  clearInterval(time.intervalId);
+  alert("YOU WON IN " + shepherdSteps + "STEPS");
+  back();
+}
+function lose(){
+    activateDebug()
+    time.paused = true;
+    clearInterval(time.intervalId);
+    alert("YOU LOST, THE SHEEP GOT EATEN");
+    back();
+}
+function activateDebug(){
+    if(!debugmode){
+        debugmode = true;
+        debug();
+    } else{ 
+        debugmode = false;
+        debug();
+    }
+}
+
+
+function debug(){
+    if(debugmode)
+    {let shepherdSquare = document.querySelector(".shepherd");
+    let Debug = getAdjacentSquares(shepherdSquare);
+    for (let a = 0; a < 8; a++){
+        if(!isObstacle(Debug[a]) && Debug[a] !== null){
+            Debug[a].classList.add("accessable");
+        }
+    }
+}else {
+    let debugSquare = document.querySelector(".accessable");
+    if(debugSquare !== null){
+        gameBoard.querySelectorAll(".accessable").forEach((square) => {
+        square.classList.remove("accessable");
+    });
+}
+}
 }

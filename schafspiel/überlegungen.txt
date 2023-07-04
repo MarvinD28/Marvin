@@ -1,6 +1,9 @@
-Spielfeld als hintergrundbild dann maximale anzahl an bäumen und steinen übereinanderlegen und
-display: none;
-machen und wenn der spieler eingibt wie viele steine und bäume gespawnt werden sollen soviele aufs 
-spielfeld bringen 
-koordinatensystem machen und buttons die mehr als eins weg sind blockieren und den button wo der spieler 
-steht auch blockieren zudem blockieren bäume und steine
+
+
+ich brauche noch doku
+
+Für eine einfachere Interaktion mit der Umgebung soll das Spielfeld intern als 2D Array abgebildet werden. Die Feldtypen sollen in diesem Gitter abgreifbar sein.
+ 
+ 
+ 
+ Fügen Sie in Javascript passende Kommentare ein (3 Sek Regel!)
